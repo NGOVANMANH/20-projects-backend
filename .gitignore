@@ -1,0 +1,29 @@
+# .NET Core generated files
+bin/
+obj/
+
+# Visual Studio specific files
+.vs/
+*.user
+*.suo
+
+# Rider specific files
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# NuGet Packages
+*.nupkg
+

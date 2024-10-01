@@ -1,0 +1,6 @@
+@_3.Weather_API_Wrapper_Service_HostAddress = http://localhost:5145
+
+GET {{_3.Weather_API_Wrapper_Service_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

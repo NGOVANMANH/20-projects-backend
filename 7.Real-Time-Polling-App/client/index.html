@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Chat Client</title>
+</head>
+<body>
+    <h1>SignalR Chat</h1>
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username">
+    </div>
+    <div>
+        <label for="message">Message:</label>
+        <input type="text" id="message">
+    </div>
+    <button onclick="sendMessage()">Send Message</button>
+
+    <h2>Messages</h2>
+    <ul id="messagesList"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        // Create a connection to the SignalR hub
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:5255/chat")
+            .build();
+
+        // Start the connection
+        async function start() {
+            try {
+                await connection.start();
+                console.log("Connected to SignalR Hub.");
+            } catch (err) {
+                console.error(err);
+                setTimeout(start, 5000); // Retry after 5 seconds
+            }
+        }
+
+        // Call the start function to initiate the connection
+        start();
+
+        // Listen for broadcast messages from the server
+        connection.on("broadCastMessage", function (user, message) {
+            const li = document.createElement("li");
+            li.textContent = `${user}: ${message}`;
+            document.getElementById("messagesList").appendChild(li);
+        });
+
+        // Send a message to the server
+        function sendMessage() {
+            const user = document.getElementById("username").value;
+            const message = document.getElementById("message").value;
+            connection.invoke("SendBroadCastMessage", user, message)
+                .catch(err => console.error(err));
+        }
+    </script>
+</body>
+</html>

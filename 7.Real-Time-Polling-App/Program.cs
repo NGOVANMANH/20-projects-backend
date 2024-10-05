@@ -2,16 +2,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+var AllowOrigins = "AllowOrigins";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:5500") // Allow this origin
-                   .AllowAnyHeader()
-                   .AllowAnyMethod()
-                   .AllowCredentials(); // SignalR requires AllowCredentials for WebSockets
-        });
+    options.AddPolicy(AllowOrigins, builder =>
+    {
+        builder.SetIsOriginAllowed(origin => true)  // Allow any origin dynamically
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,7 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowSpecificOrigins");
+app.UseCors(AllowOrigins);
 
 app.UseHttpsRedirection();
 
